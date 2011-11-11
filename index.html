@@ -1,1 +1,88 @@
-"My GitHub Page" 
+<!doctype html>
+<html>
+    <head>
+        <title>JS Tracker</title>
+        <script type="text/javascript" src="tracker.js">
+        </script>
+        <style>
+            canvas {
+                display: inline;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div>
+                <h2>Args:</h2>
+                <label>
+                    Threshold (0 -&gt; 255) <input type="text" value="230" id="threshold"/>
+                </label>
+                <label>
+                    Work factor <input type="text" value="20" id="factor"/>
+                </label>
+                <label>
+                    Zoom factor <input type="text" value="0.5" id="zfactor"/>
+                </label>
+                <label>
+                    Sensibility <input type="text" value="0" id="sensibility"/>
+                </label>
+                <label>
+                    <input type="checkbox" id="dv"/>Display video 
+                </label>
+                <label>
+                    <input type="checkbox" id="dd" checked="true"/>Display diff
+                </label><h2>Matrix:</h2>
+                <label>
+                    <input type="radio" name="m" value="sobel" checked="true"/>Sobel
+                </label>
+                <label>
+                    <input type="radio" name="m" value="kirsch"/>Kirsch
+                </label>
+                <label>
+                    <input type="radio" name="m" value="harris"/>Harris
+                </label><h2>fps</h2>
+                <p id="fps">
+                </p>
+            </div>
+            <canvas id = "c0" width = "320" height = "240">
+            </canvas>
+            <canvas id = "c1" width = "320" height = "240">
+            </canvas>
+            <canvas id = "c2" width = "320" height = "240">
+            </canvas>
+        </div>
+        <div id = "camera">
+        </div>
+        <A href = "javascript:start()">Start</A>
+        <script type = "text/javascript" src = "jquery-1.4.2.min.js">
+        </script>
+        <script type = "text/javascript" src = "jquery.webcam.js">
+        </script>
+        <script type="text/javascript">
+            var frameLines = [];
+            var line = 0, w = 320, h = 240;
+            
+            frameLines = [];
+            line = 0;
+            $("#camera").webcam({
+                width: w,
+                height: h,
+                mode: "stream",
+                swffile: "jscam_canvas_only.swf",
+                onSave: function(data){
+                    frameLines[line++] = data;
+                    if (line >= h) {
+                        line = 0;
+                        processor.setFrame(frameLines.slice(0));
+                    }
+                },
+            });
+            
+            
+            function start(){
+                processor.doLoad();
+                webcam.capture();
+            }
+        </script>
+    </body>
+</html>
